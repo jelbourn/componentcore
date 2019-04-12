@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "es2015",
+    "lib": ["es5", "es2015", "dom"],
+    "declaration": true,
+    "incremental": true,
+    "strict": true,
+    "outDir": "./dist"
+  }
+}
