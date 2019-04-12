@@ -1,0 +1,22 @@
+{
+  "name": "componentcore",
+  "version": "0.0.0",
+  "description": "Prototype low-level component foundation based on composing behaviors into interaction patterns",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jelbourn/componentcore.git"
+  },
+  "author": "jelbourn",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jelbourn/componentcore/issues"
+  },
+  "homepage": "https://github.com/jelbourn/componentcore#readme",
+  "dependencies": {
+    "typescript": "^3.4.3"
+  }
+}
