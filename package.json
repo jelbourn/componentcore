@@ -4,6 +4,7 @@
   "description": "Prototype low-level component foundation based on composing behaviors into interaction patterns",
   "main": "index.js",
   "scripts": {
+    "build": "./build.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/jelbourn/componentcore#readme",
   "dependencies": {
+    "rollup": "^1.10.0",
     "typescript": "^3.4.3"
   }
 }
