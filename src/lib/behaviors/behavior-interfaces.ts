@@ -19,10 +19,6 @@ export abstract class PatternBase {
 
   /** Removing event listeners, removing appropriate DOM nodes, etc. */
   protected teardown() { }
-
-  // TODO: figure out if this makes sense for all of the patterns
-  // TODO: maybe this should be public
-  // protected abstract getElement(): HTMLElement;
 }
 
 /** A control that has a unique ID. */
