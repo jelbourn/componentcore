@@ -57,7 +57,7 @@ export interface ListboxPattern extends ListboxStub, CanBeDisabled, HasId, HasOr
     AffectedByRtl, HasActiveDescendant<OptionPattern>, HasSelectedDescendant<OptionPattern> { }
 
 /** Mixes the common behaviors of a ListBox onto a class */
-function mixinListbox<T extends Constructor<object>>(base?: T): Constructor<ListboxPattern> & T {
+export function mixinListbox<T extends Constructor<object>>(base?: T): Constructor<ListboxPattern> & T {
   return class extends (
     mixinSelectedDescendant(
     mixinActiveDescendant(

@@ -25,7 +25,7 @@ export interface OptionPattern extends PatternBase, CanBeDisabled, HasId, CanBeS
 // TODO: the casts below shoudln't be necessary, see if we can replace
 
 /** Mixin that augments the given class with the behaviors for an `option`. */
-function mixinOption<T extends Constructor<object>>(base?: T): Constructor<OptionPattern> & T {
+export function mixinOption<T extends Constructor<object>>(base?: T): Constructor<OptionPattern> & T {
   return class extends (
     mixinSelected(
     mixinUniqueId(
