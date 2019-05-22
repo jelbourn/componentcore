@@ -7,6 +7,7 @@
  */
 
 
+import {devMode} from '../devMode';
 import {
   AffectedByRtl,
   CanBeDisabled,
@@ -73,49 +74,72 @@ export function mixinActiveDescendant<T extends Constructor<HasItems<D>>,
   return class extends base {
     activeDescendantId = '';
 
-    // TODO: deal with disabled items
-    // TODO: deal with wrapping either here in or in the keyscheme
-    // NOTE: important to not keep a reference to the item list because it might change
-    // NOTE: can't remember the active descendant index (or the item reference) because the
-    // list of items might change, leading to the index being out of date. Will have to always
-    // based on the ID at the moment.
+    // TODO: make wrapping optional
+
+    // Note: It's important not to keep a reference to the collection of items in case that
+    // collection changes to a different reference. Any time we need to get the items, we
+    // go through the `getItems` method.
+
+    // Note: It's important to not remember the active descendant index (or the item reference)
+    // because the list of items might change, leading to the index being out of date. Will have to
+    // always based on the ID at the moment.
 
     activeDescendantIndex(): number {
       return this.getItems().findIndex(i => i.id === this.activeDescendantId);
     }
 
-    activeDescendant(): D {
-      // TODO: handle the item being not found (`find` returns undefined)
-      return this.getItems().find(i => i.id === this.activeDescendantId) as D;
+    activeDescendant(): D | undefined {
+      return this.getItems().find(i => i.id === this.activeDescendantId);
     }
 
     activateItem(item: D) {
-      // TODO: handle item == null
-      this.activeDescendantId = item.id;
+      // No-op if the given item is disabled.
+      if (!item.disabled) {
+        this.activeDescendantId = item.id;
+      }
     }
 
     activateItemByIndex(index: number) {
-      // TODO: handle array out of bounds
+      const item = this.getItems()[index];
+      if (devMode && !item) {
+        throw Error(`Attempting to activateItemByIndex with an out-of-bounds index: ${index}.`);
+      }
       this.activateItem(this.getItems()[index]);
     }
 
     activateNextItem() {
-      const nextIndex = (this.activeDescendantIndex() + 1) % this.getItems().length;
-      this.activateItemByIndex(nextIndex);
+      this.activateClosestItem(this.activeDescendantIndex(), 1);
     }
 
     activatePreviousItem() {
-      const length = this.getItems().length;
-      const nextIndex = (this.activeDescendantIndex() - 1 + length) % length;
-      this.activateItemByIndex(nextIndex);
+      this.activateClosestItem(this.activeDescendantIndex(), -1);
     }
 
     activateFirstItem() {
-      this.activateItemByIndex(0);
+      // Pass the last item as the starting point so that the first item is next.
+      this.activateClosestItem(this.getItems().length - 1, 1);
     }
 
     activateLastItem() {
-      this.activateItemByIndex(this.getItems().length - 1);
+      // Pass the first item as the starting point so that the last item is next.
+      this.activateClosestItem(0, -1);
+    }
+
+    /**
+     * Activates the closest non-disabled item in the given direction.
+     * @param start The index from which to start attempting to enable.
+     * @param delta The direction through which to iterate the items.
+     */
+    private activateClosestItem(start: number, delta: -1 | 1) {
+      const items = this.getItems();
+      const length = items.length;
+
+      for (let next = (start + delta + length) % length; next !== start; next += delta) {
+        if (!items[next].disabled) {
+          this.activateItemByIndex(next);
+          return;
+        }
+      }
     }
 
     constructor(...args: any[]) { super(...args); }
