@@ -19,6 +19,6 @@
   "homepage": "https://github.com/jelbourn/componentcore#readme",
   "dependencies": {
     "rollup": "^1.10.0",
-    "typescript": "^3.4.3"
+    "typescript": "^3.4.5"
   }
 }
