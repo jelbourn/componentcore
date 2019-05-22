@@ -23,14 +23,14 @@ export class ListNavigationKeyScheme implements KeyScheme<ListLike> {
 
     switch (keyCode) {
       case DOWN_ARROW:
-        if (control.orientation === 'vertical') {
+        if (!control.isHorizontal) {
           control.activateNextItem();
           return true;
         }
         break;
 
       case UP_ARROW:
-        if (control.orientation === 'vertical') {
+        if (!control.isHorizontal) {
           control.activatePreviousItem();
           return true;
         }
@@ -38,7 +38,7 @@ export class ListNavigationKeyScheme implements KeyScheme<ListLike> {
 
 
       case RIGHT_ARROW:
-        if (control.orientation === 'horizontal' && !control.isRtl) {
+        if (control.isHorizontal && !control.isRtl) {
           control.activateNextItem();
           return true;
         } else if (control.isRtl) {
@@ -48,7 +48,7 @@ export class ListNavigationKeyScheme implements KeyScheme<ListLike> {
         break;
 
       case LEFT_ARROW:
-        if (control.orientation === 'horizontal' && !control.isRtl) {
+        if (control.isHorizontal && !control.isRtl) {
           control.activatePreviousItem();
           return true;
         } else if (control.isRtl) {

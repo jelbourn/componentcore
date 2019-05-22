@@ -51,7 +51,9 @@ export function mixinUniqueId<T extends Constructor<object>>(base: T): Construct
 /** Mixin that augments a given class with an `orientation` property. */
 export function mixinOrientation<T extends Constructor<object>>(base: T): Constructor<HasOrientation> & T {
   return class extends base {
-    orientation: 'vertical' | 'horizontal' = 'vertical';
+    // Default to vertical because the most common controls (menu, listbox) default to vertical.
+    isHorizontal: boolean = false;
+
     constructor(...args: any[]) { super(...args); }
   }
 }

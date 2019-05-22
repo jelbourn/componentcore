@@ -33,8 +33,7 @@ export interface HasItems<T> {
 
 /** A control that can be oriented either veritcally or horizontally. */
 export interface HasOrientation {
-  // TODO: change this from a string to a boolean
-  orientation: 'vertical' | 'horizontal';
+  isHorizontal: boolean;
 }
 
 /** A control that has some keyboard interaction. */
