@@ -38,7 +38,8 @@ import {MenuItemPattern} from './menuitem';
  * Abstract stub for base `menu`. End developer must provide the abstract methods in order to
  * apply further behaviors.
  */
-declare abstract class MenuStub extends PatternBase implements HasItems<MenuItemPattern>, CanBeFocused {
+declare abstract class MenuStub extends PatternBase
+    implements HasItems<MenuItemPattern>, CanBeFocused {
 
   // Defer `getItems()` to the end-developer because different
   // frameworks have their own ways of getting children.

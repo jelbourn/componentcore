@@ -36,7 +36,8 @@ import {OptionPattern} from './option';
  * Abstract stub for base `listbox`. End developer must provide the abstract methods in order to
  * apply further behaviors.
  */
-declare abstract class ListboxStub extends PatternBase implements HasItems<OptionPattern>,CanBeFocused {
+declare abstract class ListboxStub extends PatternBase
+    implements HasItems<OptionPattern>, CanBeFocused {
 
   // Defer `getItems()` to the end-developer because different
   // frameworks have their own ways of getting children.
@@ -71,7 +72,8 @@ export interface ListboxPattern extends ListboxStub,
 // structure of `ListboxPattern`.
 
 /** Mixes the common behaviors of a ListBox onto a class */
-export function mixinListbox<T extends Constructor<object>>(base?: T): Constructor<ListboxPattern> & T {
+export function mixinListbox<T extends Constructor<object>>(base?: T):
+    Constructor<ListboxPattern> & T {
   return class extends (
     mixinSelectedDescendant(
     mixinActiveDescendant(
