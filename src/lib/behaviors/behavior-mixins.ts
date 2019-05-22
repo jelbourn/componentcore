@@ -65,10 +65,10 @@ export function mixinBidi<T extends Constructor<object>>(base: T): Constructor<A
 }
 
 
-// TODO: remove `CanBeSelected` from `D` here; it shouldn't be necessary, but TS complains
 /** Mixin that augments a given class with behavior for having an active descendant item. */
-export function mixinActiveDescendant<T extends Constructor<HasItems<D> & PatternBase>,
-    D extends PatternBase & HasId & CanBeDisabled & CanBeSelected>(base: T): Constructor<HasActiveDescendant<D>> & T {
+export function mixinActiveDescendant<T extends Constructor<HasItems<D>>,
+    D extends HasId & CanBeDisabled>(base: T):
+        Constructor<HasActiveDescendant<T extends Constructor<HasItems<infer D>> ? D : D>> & T {
   return class extends base {
     activeDescendantId = '';
 
@@ -118,12 +118,13 @@ export function mixinActiveDescendant<T extends Constructor<HasItems<D> & Patter
     }
 
     constructor(...args: any[]) { super(...args); }
-  };
+  } as Constructor<HasActiveDescendant<any>> & T;
 }
 
 /** Mixin that augments a given class with behavior for descendant items than can be selected. */
-export function mixinSelectedDescendant<T extends Constructor<HasItems<D> & HasActiveDescendant<D> & PatternBase>,
-    D extends PatternBase & HasId & CanBeDisabled & CanBeSelected>(base: T): Constructor<HasSelectedDescendant<D>> & T {
+export function mixinSelectedDescendant<T extends Constructor<HasItems<D> & HasActiveDescendant<D>>,
+    D extends HasId & CanBeDisabled & CanBeSelected>(base: T):
+    Constructor<HasSelectedDescendant<T extends Constructor<HasItems<infer D>> ? D : D>> & T {
   return class extends base {
     multiple = false;
     selectedDescendantId = '';
@@ -145,6 +146,8 @@ export function mixinSelectedDescendant<T extends Constructor<HasItems<D> & HasA
       item.selected ? this.deselectItem(item) : this.selectItem(item);
     }
 
-    constructor(...args: any[]) { super(...args); }
+    constructor(...args: any[]) {
+      super(...args);
+    }
   };
 }
