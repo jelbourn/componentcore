@@ -1,5 +1,7 @@
 import {mixinListbox} from '../patterns/listbox';
 import {mixinOption, OptionPattern} from '../patterns/option';
+import {mixinDomFocus, mixinDomKeyHandling} from './dom_common';
+
 
 // TODO: figure out a way to get rid of optionMap. Usually this mapping is something inherent
 // to the framework level, so I'm not sure what the best vanilla DOM analog would be.
@@ -7,48 +9,26 @@ import {mixinOption, OptionPattern} from '../patterns/option';
 /** Map of option DOM elements to the corresponding behavior class. */
 const optionMap = new WeakMap<Element, OptionDom>();
 
+
 /**
  * Vanilla DOM implementation of the `listbox` pattern.
  *
  * By extending `mixinListbox()`, we only need to implement the abstract members from
  * `ListboxStub`, which represent the bits that are framework-specific.
  */
-export class ListboxDom extends mixinListbox() {
-  isFocused = false;
-  tabIndex = 0;
-
+export class ListboxDom extends mixinDomKeyHandling(mixinDomFocus(mixinListbox())) {
   private readonly optionObserver: MutationObserver =
       new MutationObserver(() => this.updateOptions());
 
   private options: OptionPattern[] = [];
-
-  private keydownListener = (e: KeyboardEvent) => {
-    for (const scheme of this.getKeySchemes()) {
-      const handled = scheme.handleKey(this, e);
-      if (handled) {
-        break;
-      }
-    }
-
-    // After the keydown has been handled, update the DOM.
-    this.renderOptionState();
-  };
-
-  private focusHandler = () => { this.isFocused = true; };
-  private blurHandler = () => { this.isFocused = false; };
 
   constructor(public hostElement: HTMLElement) {
     super();
   }
 
   setup() {
-    this.hostElement.addEventListener('keydown', this.keydownListener);
+    super.setup();
     this.hostElement.setAttribute('role', 'listbox');
-    this.hostElement.setAttribute('tabindex', `${this.tabIndex}`);
-
-    this.hostElement.addEventListener('focus', this.focusHandler);
-    this.hostElement.addEventListener('blur', this.blurHandler);
-
     this.updateOptions();
 
     // Use `subtree` because the options cold be inside of an optgroup
@@ -58,24 +38,12 @@ export class ListboxDom extends mixinListbox() {
   }
 
   teardown() {
-    this.hostElement.removeEventListener('keydown', this.keydownListener);
-
-    this.hostElement.removeEventListener('focus', this.focusHandler);
-    this.hostElement.removeEventListener('blur', this.blurHandler);
-
+    super.teardown();
     this.optionObserver.disconnect();
   }
 
   getItems(): OptionPattern[] {
     return this.options;
-  }
-
-  focus() {
-    this.hostElement.focus();
-  }
-
-  blur() {
-    this.hostElement.blur();
   }
 
   private getOptionElements(): Element[] {
@@ -87,7 +55,7 @@ export class ListboxDom extends mixinListbox() {
     this.options = this.getOptionElements().map(o => optionMap.get(o) as OptionDom);
   }
 
-  private renderOptionState(): void {
+  protected render(): void {
     this.hostElement.setAttribute('aria-activedescendant', this.activeDescendantId);
 
     for (const optionElement of this.getOptionElements()) {
@@ -110,6 +78,7 @@ export class OptionDom extends mixinOption() {
   }
 
   setup() {
+    super.setup();
     this.hostElement.id = this.id;
     this.hostElement.setAttribute('role', 'option');
   }

@@ -12,13 +12,9 @@ import {KeyScheme} from '../key_schemes/keyscheme';
 /** Constructor for a type T */
 export type Constructor<T> = new(...args: any[]) => T;
 
-/** Base class for all mixins to be applied such that include setup and teardown methods. */
-export abstract class PatternBase {
-  /** Adding event listeners, setting initial attributes, etc. */
-  protected setup() { }
-
-  /** Removing event listeners, removing appropriate DOM nodes, etc. */
-  protected teardown() { }
+export interface HasLifecycle {
+  setup(): void;
+  teardown(): void;
 }
 
 /** A control that has a unique ID. */

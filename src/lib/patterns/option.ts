@@ -10,16 +10,21 @@ import {
   CanBeSelected,
   Constructor,
   HasId,
-  PatternBase,
+  HasLifecycle,
 } from '../behaviors/behavior-interfaces';
-import {mixinDisabled, mixinSelected, mixinUniqueId} from '../behaviors/behavior-mixins';
+import {
+  mixinDisabled,
+  mixinLifecycle,
+  mixinSelected,
+  mixinUniqueId,
+} from '../behaviors/behavior-mixins';
 
 
 /** Abstract stub for base `option` behavior that must be implemented by the end-developer. */
-declare abstract class OptionStub extends PatternBase { }
+declare abstract class OptionStub { }
 
 /** Union of all behaviors that compose into an `option`. */
-export interface OptionPattern extends PatternBase, CanBeDisabled, HasId, CanBeSelected { }
+export interface OptionPattern extends HasLifecycle, CanBeDisabled, HasId, CanBeSelected { }
 
 // Note: the `as Constructor<OptionStub>` cast below exists to enforce that downstream classes that
 // apply this mixin are still required to implement any abstract members on the stub class.
@@ -32,7 +37,8 @@ export function mixinOption<T extends Constructor<object>>(base?: T): Constructo
   return class extends (
     mixinSelected(
     mixinUniqueId(
-    mixinDisabled((base || class { } as Constructor<OptionStub>)))) as any) {
+    mixinLifecycle(
+    mixinDisabled((base || class { } as Constructor<OptionStub>))))) as any) {
     constructor(...args: any[]) { super(...args); }
   } as Constructor<OptionPattern> & T;
 }

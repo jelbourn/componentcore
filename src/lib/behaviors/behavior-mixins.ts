@@ -15,7 +15,7 @@ import {
   Constructor,
   HasActiveDescendant,
   HasId,
-  HasItems,
+  HasItems, HasLifecycle,
   HasOrientation,
   HasSelectedDescendant,
 } from './behavior-interfaces';
@@ -25,6 +25,15 @@ import {
 export function mixinDisabled<T extends Constructor<object>>(base: T): Constructor<CanBeDisabled> & T {
   return class extends base {
     disabled = false;
+    constructor(...args: any[]) { super(...args); }
+  };
+}
+
+/** Mixin that augments a given class with `setup` and `teardown` methods. */
+export function mixinLifecycle<T extends Constructor<object>>(base: T): Constructor<HasLifecycle> & T {
+  return class extends base {
+    setup(): void {}
+    teardown() {}
     constructor(...args: any[]) { super(...args); }
   };
 }

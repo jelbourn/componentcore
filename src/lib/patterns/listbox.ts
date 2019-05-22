@@ -13,15 +13,14 @@ import {
   HasActiveDescendant,
   HasId,
   HasItems,
-  HasKeySchemes,
+  HasKeySchemes, HasLifecycle,
   HasOrientation,
   HasSelectedDescendant,
-  PatternBase,
 } from '../behaviors/behavior-interfaces';
 import {
   mixinActiveDescendant,
   mixinBidi,
-  mixinDisabled,
+  mixinDisabled, mixinLifecycle,
   mixinOrientation,
   mixinSelectedDescendant,
   mixinUniqueId,
@@ -36,9 +35,7 @@ import {OptionPattern} from './option';
  * Abstract stub for base `listbox`. End developer must provide the abstract methods in order to
  * apply further behaviors.
  */
-declare abstract class ListboxStub extends PatternBase
-    implements HasItems<OptionPattern>, CanBeFocused {
-
+declare abstract class ListboxStub implements HasItems<OptionPattern>, CanBeFocused {
   // Defer `getItems()` to the end-developer because different
   // frameworks have their own ways of getting children.
   abstract getItems(): OptionPattern[];
@@ -56,7 +53,9 @@ export const listboxKeySchemes: KeyScheme<ListboxPattern>[] = [
 ];
 
 /** Union of all behaviors that compose into a `listbox`. */
-export interface ListboxPattern extends ListboxStub,
+export interface ListboxPattern extends
+    ListboxStub,
+    HasLifecycle,
     CanBeDisabled,
     HasId,
     HasOrientation,
@@ -79,8 +78,9 @@ export function mixinListbox<T extends Constructor<object>>(base?: T):
     mixinActiveDescendant(
     mixinBidi(
     mixinOrientation(
+    mixinLifecycle(
     mixinDisabled(
-    mixinUniqueId((base || class { }) as Constructor<ListboxStub>)))))) as any) {
+    mixinUniqueId((base || class { }) as Constructor<ListboxStub>))))))) as any) {
 
     getKeySchemes(): KeyScheme<ListboxPattern>[] {
       return listboxKeySchemes;
