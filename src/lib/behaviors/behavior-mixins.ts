@@ -42,7 +42,6 @@ let nextId = 0;
 /** Mixin that augments a given class with an `id` property initialized to a unique value. */
 export function mixinUniqueId<T extends Constructor<object>>(base: T): Constructor<HasId> & T {
   return class extends base {
-    // TODO: consider changing this to an integer for faster comparisons (micro-optimization)
     id = `cc${nextId++}`;
     constructor(...args: any[]) { super(...args); }
   };

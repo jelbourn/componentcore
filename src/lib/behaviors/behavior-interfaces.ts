@@ -78,9 +78,8 @@ export interface HasActiveDescendant<D> {
   activateLastItem(): void;
 }
 
-// TODO: This should have `D extends CanBeSelected`
 /** A control that has one or more selected descendants, such as a listbox. */
-export interface HasSelectedDescendant<D> {
+export interface HasSelectedDescendant<D extends CanBeSelected> {
   multiple: boolean;
   selectedDescendantId: string;
 

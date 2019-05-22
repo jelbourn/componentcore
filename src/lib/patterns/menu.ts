@@ -61,8 +61,7 @@ export interface MenuPattern extends MenuStub,
     HasOrientation,
     AffectedByRtl,
     HasKeySchemes<MenuPattern>,
-    HasActiveDescendant<MenuItemPattern>,
-    HasSelectedDescendant<MenuItemPattern> { }
+    HasActiveDescendant<MenuItemPattern> { }
 
 // Note: the `as Constructor<MenuStub>` cast below exists to enforce that downstream classes that
 // apply this mixin are still required to implement any abstract members on the stub class.
