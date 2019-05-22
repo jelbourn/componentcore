@@ -92,10 +92,11 @@ export class ListboxDom extends mixinListbox() {
 
     for (const optionElement of this.getOptionElements()) {
       const option = optionMap.get(optionElement);
-      if (option && option.selected) {
-        optionElement.setAttribute('aria-selected', 'true');
-      } else {
-        optionElement.removeAttribute('aria-selected');
+      if (option) {
+        option.selected ?
+            optionElement.setAttribute('aria-selected', 'true') :
+            optionElement.removeAttribute('aria-selected');
+        optionElement.classList.toggle('cc-item-active', option.id === this.activeDescendantId);
       }
     }
   }
