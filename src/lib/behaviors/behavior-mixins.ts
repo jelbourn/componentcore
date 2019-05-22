@@ -22,25 +22,25 @@ import {
 
 
 /** Mixin that augments a given class with a `disabled` property. */
-export function mixinDisabled<T extends Constructor<object>>(base: T): Constructor<CanBeDisabled> & T {
-  return class extends base {
+export function mixinDisabled<T extends Constructor>(base: T): Constructor<CanBeDisabled> & T {
+  return class extends base implements CanBeDisabled {
     disabled = false;
     constructor(...args: any[]) { super(...args); }
   };
 }
 
 /** Mixin that augments a given class with `setup` and `teardown` methods. */
-export function mixinLifecycle<T extends Constructor<object>>(base: T): Constructor<HasLifecycle> & T {
-  return class extends base {
-    setup(): void {}
+export function mixinLifecycle<T extends Constructor>(base: T): Constructor<HasLifecycle> & T {
+  return class extends base implements HasLifecycle {
+    setup() {}
     teardown() {}
     constructor(...args: any[]) { super(...args); }
   };
 }
 
 /** Mixin that augments a given class with a `selected` property. */
-export function mixinSelected<T extends Constructor<object>>(base: T): Constructor<CanBeSelected> & T {
-  return class extends base {
+export function mixinSelected<T extends Constructor>(base: T): Constructor<CanBeSelected> & T {
+  return class extends base implements CanBeSelected {
     selected = false;
     constructor(...args: any[]) { super(...args); }
   };
@@ -50,16 +50,16 @@ export function mixinSelected<T extends Constructor<object>>(base: T): Construct
 let nextId = 0;
 
 /** Mixin that augments a given class with an `id` property initialized to a unique value. */
-export function mixinUniqueId<T extends Constructor<object>>(base: T): Constructor<HasId> & T {
-  return class extends base {
+export function mixinUniqueId<T extends Constructor>(base: T): Constructor<HasId> & T {
+  return class extends base implements HasId {
     id = `cc${nextId++}`;
     constructor(...args: any[]) { super(...args); }
   };
 }
 
 /** Mixin that augments a given class with an `orientation` property. */
-export function mixinOrientation<T extends Constructor<object>>(base: T): Constructor<HasOrientation> & T {
-  return class extends base {
+export function mixinOrientation<T extends Constructor>(base: T): Constructor<HasOrientation> & T {
+  return class extends base implements HasOrientation {
     // Default to vertical because the most common controls (menu, listbox) default to vertical.
     isHorizontal: boolean = false;
 
@@ -68,8 +68,8 @@ export function mixinOrientation<T extends Constructor<object>>(base: T): Constr
 }
 
 /** Mixin that augments a given class with an `isRtl` property. */
-export function mixinBidi<T extends Constructor<object>>(base: T): Constructor<AffectedByRtl> & T {
-  return class extends base {
+export function mixinBidi<T extends Constructor>(base: T): Constructor<AffectedByRtl> & T {
+  return class extends base implements AffectedByRtl {
     isRtl = false;
     constructor(...args: any[]) { super(...args); }
   }
@@ -79,8 +79,8 @@ export function mixinBidi<T extends Constructor<object>>(base: T): Constructor<A
 /** Mixin that augments a given class with behavior for having an active descendant item. */
 export function mixinActiveDescendant<T extends Constructor<HasItems<D>>,
     D extends HasId & CanBeDisabled>(base: T):
-        Constructor<HasActiveDescendant<T extends Constructor<HasItems<infer D>> ? D : D>> & T {
-  return class extends base {
+        Constructor<HasActiveDescendant<T extends Constructor<HasItems<infer I>> ? I : any>> & T {
+  return class extends base implements HasActiveDescendant<D> {
     activeDescendantId = '';
 
     // TODO: make wrapping optional
@@ -97,8 +97,9 @@ export function mixinActiveDescendant<T extends Constructor<HasItems<D>>,
       return this.getItems().findIndex(i => i.id === this.activeDescendantId);
     }
 
-    activeDescendant(): D | undefined {
-      return this.getItems().find(i => i.id === this.activeDescendantId);
+    activeDescendant(): D {
+      // TODO(mmalerba): Is it safe to assume this is always defined?
+      return this.getItems().find(i => i.id === this.activeDescendantId)!;
     }
 
     activateItem(item: D) {
@@ -158,8 +159,8 @@ export function mixinActiveDescendant<T extends Constructor<HasItems<D>>,
 /** Mixin that augments a given class with behavior for descendant items than can be selected. */
 export function mixinSelectedDescendant<T extends Constructor<HasItems<D> & HasActiveDescendant<D>>,
     D extends HasId & CanBeDisabled & CanBeSelected>(base: T):
-    Constructor<HasSelectedDescendant<T extends Constructor<HasItems<infer D>> ? D : D>> & T {
-  return class extends base {
+    Constructor<HasSelectedDescendant<T extends Constructor<HasItems<infer I>> ? I : any>> & T {
+  return class extends base implements HasSelectedDescendant<D> {
     multiple = false;
     selectedDescendantId = '';
 

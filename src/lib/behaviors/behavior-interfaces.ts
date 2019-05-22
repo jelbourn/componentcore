@@ -10,7 +10,7 @@ import {KeyScheme} from '../key_schemes/keyscheme';
 
 
 /** Constructor for a type T */
-export type Constructor<T> = new(...args: any[]) => T;
+export type Constructor<T = object> = new(...args: any[]) => T;
 
 export interface HasLifecycle {
   setup(): void;
