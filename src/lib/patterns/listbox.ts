@@ -27,6 +27,8 @@ import {
   mixinUniqueId,
 } from '../behaviors/behavior-mixins';
 import {KeyScheme} from '../key_schemes/keyscheme';
+import {ListNavigationKeyScheme} from '../key_schemes/list-navigation';
+import {ListSelectionKeyScheme} from '../key_schemes/list-selection';
 import {OptionPattern} from './option';
 
 
@@ -34,16 +36,11 @@ import {OptionPattern} from './option';
  * Abstract stub for base `listbox`. End developer must provide the abstract methods in order to
  * apply further behaviors.
  */
-declare abstract class ListboxStub extends PatternBase implements HasItems<OptionPattern>,
-    HasKeySchemes, CanBeFocused {
+declare abstract class ListboxStub extends PatternBase implements HasItems<OptionPattern>,CanBeFocused {
 
   // Defer `getItems()` to the end-developer because different
   // frameworks have their own ways of getting children.
   abstract getItems(): OptionPattern[];
-
-  // TODO: why? Also why any.
-  // Defer `getKeySchemes()` because ???
-  abstract getKeySchemes(): KeyScheme<any>[];
 
   // Defer focus behaviors because DOM access should be done at the framework level.
   abstract isFocused: boolean;
@@ -52,9 +49,20 @@ declare abstract class ListboxStub extends PatternBase implements HasItems<Optio
   abstract blur(): void;
 }
 
+export const listboxKeySchemes: KeyScheme<ListboxPattern>[] = [
+  new ListNavigationKeyScheme(),
+  new ListSelectionKeyScheme(),
+];
+
 /** Union of all behaviors that compose into a `listbox`. */
-export interface ListboxPattern extends ListboxStub, CanBeDisabled, HasId, HasOrientation,
-    AffectedByRtl, HasActiveDescendant<OptionPattern>, HasSelectedDescendant<OptionPattern> { }
+export interface ListboxPattern extends ListboxStub,
+    CanBeDisabled,
+    HasId,
+    HasOrientation,
+    AffectedByRtl,
+    HasKeySchemes<ListboxPattern>,
+    HasActiveDescendant<OptionPattern>,
+    HasSelectedDescendant<OptionPattern> { }
 
 // Note: the `as Constructor<ListboxStub>` cast below exists to enforce that downstream classes that
 // apply this mixin are still required to implement any abstract members on the stub class.
@@ -71,6 +79,11 @@ export function mixinListbox<T extends Constructor<object>>(base?: T): Construct
     mixinOrientation(
     mixinDisabled(
     mixinUniqueId((base || class { }) as Constructor<ListboxStub>)))))) as any) {
+
+    getKeySchemes(): KeyScheme<ListboxPattern>[] {
+      return listboxKeySchemes;
+    }
+
     constructor(...args: any[]) { super(...args); }
   } as Constructor<ListboxPattern> & T;
 }

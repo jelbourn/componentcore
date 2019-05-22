@@ -15,8 +15,8 @@ import {
   HasActiveDescendant,
   HasId,
   HasItems,
-  HasOrientation, HasSelectedDescendant,
-  PatternBase,
+  HasOrientation,
+  HasSelectedDescendant,
 } from './behavior-interfaces';
 
 

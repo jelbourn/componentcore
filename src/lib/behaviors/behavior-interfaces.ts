@@ -38,8 +38,8 @@ export interface HasOrientation {
 }
 
 /** A control that has some keyboard interaction. */
-export interface HasKeySchemes {
-  getKeySchemes(): KeyScheme<any>[];
+export interface HasKeySchemes<C> {
+  getKeySchemes(): KeyScheme<C>[];
 }
 
 /** A control whose interaction is affected by the locale text direction. */

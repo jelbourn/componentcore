@@ -14,6 +14,8 @@ import {KeyScheme} from './keyscheme';
 /** A list-like control that has arrow-key navigation, such as listbox or menu. */
 export type ListLike = HasActiveDescendant<any> & AffectedByRtl & HasOrientation;
 
+// TODO: KeySchemes can be singletons
+
 /** Key scheme for navigating through a list-like control, such as a listbox or menu. */
 export class ListNavigationKeyScheme implements KeyScheme<ListLike> {
   handleKey(control: ListLike, event: KeyboardEvent): boolean {

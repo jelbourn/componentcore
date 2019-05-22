@@ -26,6 +26,7 @@ import {
   mixinUniqueId,
 } from '../behaviors/behavior-mixins';
 import {KeyScheme} from '../key_schemes/keyscheme';
+import {ListNavigationKeyScheme} from '../key_schemes/list-navigation';
 import {MenuItemPattern} from './menuitem';
 
 
@@ -37,16 +38,11 @@ import {MenuItemPattern} from './menuitem';
  * Abstract stub for base `menu`. End developer must provide the abstract methods in order to
  * apply further behaviors.
  */
-declare abstract class MenuStub extends PatternBase implements HasItems<MenuItemPattern>,
-    HasKeySchemes, CanBeFocused {
+declare abstract class MenuStub extends PatternBase implements HasItems<MenuItemPattern>, CanBeFocused {
 
   // Defer `getItems()` to the end-developer because different
   // frameworks have their own ways of getting children.
   abstract getItems(): MenuItemPattern[];
-
-  // TODO: why? Also why any.
-  // Defer `getKeySchemes()` because ???
-  abstract getKeySchemes(): KeyScheme<any>[];
 
   // Defer focus behaviors because DOM access should be done at the framework level.
   abstract isFocused: boolean;
@@ -55,9 +51,17 @@ declare abstract class MenuStub extends PatternBase implements HasItems<MenuItem
   abstract blur(): void;
 }
 
+export const menuKeySchemes: KeyScheme<MenuPattern>[] = [new ListNavigationKeyScheme()];
+
 /** Union of all behaviors that compose into a `menu`. */
-export interface MenuPattern extends MenuStub, CanBeDisabled, HasId, HasOrientation,
-    AffectedByRtl, HasActiveDescendant<MenuItemPattern>, HasSelectedDescendant<MenuItemPattern> { }
+export interface MenuPattern extends MenuStub,
+    CanBeDisabled,
+    HasId,
+    HasOrientation,
+    AffectedByRtl,
+    HasKeySchemes<MenuPattern>,
+    HasActiveDescendant<MenuItemPattern>,
+    HasSelectedDescendant<MenuItemPattern> { }
 
 // Note: the `as Constructor<MenuStub>` cast below exists to enforce that downstream classes that
 // apply this mixin are still required to implement any abstract members on the stub class.
@@ -73,6 +77,11 @@ export function mixinMenu<T extends Constructor<object>>(base?: T): Constructor<
     mixinOrientation(
     mixinDisabled(
     mixinUniqueId((base || class { }) as Constructor<MenuStub>))))) as any) {
+
+    getKeySchemes(): KeyScheme<MenuPattern>[] {
+      return menuKeySchemes;
+    }
+
     constructor(...args: any[]) { super(...args); }
   } as Constructor<MenuPattern> & T;
 }

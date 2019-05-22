@@ -1,18 +1,5 @@
-import {KeyScheme} from '../key_schemes/keyscheme';
-import {ListNavigationKeyScheme} from '../key_schemes/list-navigation';
-import {ListSelectionKeyScheme} from '../key_schemes/list-selection';
 import {mixinListbox} from '../patterns/listbox';
 import {mixinOption, OptionPattern} from '../patterns/option';
-
-
-// TODO: this `any` should not be necessary, but TS doesn't seem to understand that
-// `ListboxDom` satifies the `control` type for BOTH ListKeyScheme and SelectionListKeyScheme.
-
-/** Key schemes that apply to a listbox. */
-const listboxKeySchemes: KeyScheme<any>[] = [
-  new ListNavigationKeyScheme(),
-  new ListSelectionKeyScheme(),
-];
 
 // TODO: figure out a way to get rid of optionMap. Usually this mapping is something inherent
 // to the framework level, so I'm not sure what the best vanilla DOM analog would be.
@@ -47,8 +34,8 @@ export class ListboxDom extends mixinListbox() {
     this.renderOptionState();
   };
 
-  private focusHandler = () => { this.isFocused = true; }
-  private blurHandler = () => { this.isFocused = false; }
+  private focusHandler = () => { this.isFocused = true; };
+  private blurHandler = () => { this.isFocused = false; };
 
   constructor(public hostElement: HTMLElement) {
     super();
@@ -89,10 +76,6 @@ export class ListboxDom extends mixinListbox() {
 
   blur() {
     this.hostElement.blur();
-  }
-
-  getKeySchemes() {
-    return listboxKeySchemes;
   }
 
   private getOptionElements(): Element[] {
