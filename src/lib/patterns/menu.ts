@@ -29,6 +29,10 @@ import {KeyScheme} from '../key_schemes/keyscheme';
 import {MenuItemPattern} from './menuitem';
 
 
+// TODO: a menu *can* have a a selection via `menuitemcheckbox` and `menuitemradio`
+// TODO: menu and listbox share a lot, potentially refactor out a common thing like "ListLike"
+
+
 /**
  * Abstract stub for base `menu`. End developer must provide the abstract methods in order to
  * apply further behaviors.
