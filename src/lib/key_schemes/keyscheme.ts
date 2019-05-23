@@ -7,8 +7,6 @@
  */
 
 
-import {Inferred} from '../behaviors/behavior-interfaces';
-
 /**
  * Represents a set of keyboard controls that map to actions. One or more KeySchemes can
  * be applied to a control.
@@ -23,5 +21,5 @@ export interface KeyScheme<T> {
    * @param keyEvent The keyboard event being handled.
    * @returns Whether the key event has handled by this scheme.
    */
-  handleKey(control: Inferred<T>, keyEvent: KeyboardEvent): boolean;
+  handleKey(control: T, keyEvent: KeyboardEvent): boolean;
 }

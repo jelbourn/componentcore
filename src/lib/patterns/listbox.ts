@@ -70,21 +70,24 @@ export interface ListboxPattern extends
 // abstract stub class prevents TypeScript from recognizing that the mixins applied satisfy the
 // structure of `ListboxPattern`.
 
+export function mixinListboxKeyScheme<T extends Constructor>(base: T): Constructor<HasKeySchemes<ListboxPattern>> & T {
+  return class extends base implements HasKeySchemes<ListboxPattern> {
+    getKeySchemes(): KeyScheme<ListboxPattern>[] {
+      return listboxKeySchemes;
+    }
+
+    constructor(...args: any[]) { super(...args); }
+  };
+}
+
 /** Mixes the common behaviors of a ListBox onto a class */
 export function mixinListbox<T extends Constructor>(base?: T): Constructor<ListboxPattern> & T {
-  return class extends (
+  return mixinListboxKeyScheme(
     mixinSelectedDescendant(
     mixinActiveDescendant(
     mixinBidi(
     mixinOrientation(
     mixinLifecycle(
     mixinDisabled(
-    mixinUniqueId((base || class { }) as Constructor<ListboxStub>))))))) as any) {
-
-    getKeySchemes(): KeyScheme<ListboxPattern>[] {
-      return listboxKeySchemes;
-    }
-
-    constructor(...args: any[]) { super(...args); }
-  } as Constructor<ListboxPattern> & T;
+    mixinUniqueId((base || class {}) as T & Constructor<ListboxStub>))))))));
 }

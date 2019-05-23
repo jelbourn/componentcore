@@ -13,21 +13,23 @@ import {
   HasActiveDescendant,
   HasId,
   HasItems,
-  HasKeySchemes, HasLifecycle,
+  HasKeySchemes,
+  HasLifecycle,
   HasOrientation,
   HasSelectedDescendant,
 } from '../behaviors/behavior-interfaces';
 import {
   mixinActiveDescendant,
   mixinBidi,
-  mixinDisabled, mixinLifecycle,
-  mixinOrientation,
+  mixinDisabled,
+  mixinLifecycle,
   mixinSelectedDescendant,
   mixinUniqueId,
 } from '../behaviors/behavior-mixins';
 import {KeyScheme} from '../key_schemes/keyscheme';
 import {ListNavigationKeyScheme} from '../key_schemes/list-navigation';
 import {ListSelectionKeyScheme} from '../key_schemes/list-selection';
+import {listboxKeySchemes} from './listbox';
 import {TabPattern} from './tab';
 
 
@@ -71,23 +73,32 @@ export interface TabListPattern extends
 // abstract stub class prevents TypeScript from recognizing that the mixins applied satisfy the
 // structure of `TabListPattern`.
 
+export function mixinTabListKeyScheme<T extends Constructor>(base: T): Constructor<HasKeySchemes<TabListPattern>> & T {
+  return class extends base implements HasKeySchemes<TabListPattern> {
+    getKeySchemes(): KeyScheme<TabListPattern>[] {
+      return listboxKeySchemes;
+    }
+
+    constructor(...args: any[]) { super(...args); }
+  };
+}
+
+// We don't use `mixinOrientation` because we want to default to horizontal
+export function mixinTabListOrientation<T extends Constructor>(base: T): Constructor<HasOrientation> & T {
+  return class extends base implements HasOrientation {
+    isHorizontal: boolean = true;
+    constructor(...args: any[]) { super(...args); }
+  }
+}
+
 /** Mixes the common behaviors of a ListBox onto a class */
 export function mixinTabList<T extends Constructor>(base?: T): Constructor<TabListPattern> & T {
-  return class extends (
+  return mixinTabListKeyScheme(
+    mixinTabListOrientation(
     mixinSelectedDescendant(
     mixinActiveDescendant(
     mixinBidi(
     mixinLifecycle(
     mixinDisabled(
-    mixinUniqueId((base || class { }) as Constructor<TabListStub>)))))) as any) {
-
-    // We don't use `mixinOrientation` because we want to default to horizontal
-    isHorizontal: boolean = true;
-
-    getKeySchemes(): KeyScheme<TabListPattern>[] {
-      return tablistKeySchemes;
-    }
-
-    constructor(...args: any[]) { super(...args); }
-  } as Constructor<TabListPattern> & T;
+    mixinUniqueId((base || class {}) as T & Constructor<TabListStub>))))))));
 }

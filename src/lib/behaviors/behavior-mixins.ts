@@ -19,7 +19,6 @@ import {
   HasLifecycle,
   HasOrientation,
   HasSelectedDescendant,
-  Inferred,
 } from './behavior-interfaces';
 
 
@@ -98,12 +97,12 @@ export function mixinActiveDescendant<T extends Constructor<HasItems<D>>,
       return this.getItems().findIndex(i => i.id === this.activeDescendantId);
     }
 
-    activeDescendant(): Inferred<D> {
+    activeDescendant(): D {
       // TODO(mmalerba): Is it safe to assume this is always defined?
-      return this.getItems().find(i => i.id === this.activeDescendantId) as Inferred<D>;
+      return this.getItems().find(i => i.id === this.activeDescendantId) as D;
     }
 
-    activateItem(item: Inferred<D>) {
+    activateItem(item: D) {
       // No-op if the given item is disabled.
       if (!item.disabled) {
         this.activeDescendantId = item.id;
@@ -165,7 +164,7 @@ export function mixinSelectedDescendant<T extends Constructor<HasItems<D> & HasA
     multiple = false;
     selectedDescendantId = '';
 
-    selectItem(item: Inferred<D>) {
+    selectItem(item: D) {
       if (!this.multiple) {
         this.getItems().forEach(i => i.selected = false);
       }
@@ -173,7 +172,7 @@ export function mixinSelectedDescendant<T extends Constructor<HasItems<D> & HasA
       item.selected = true;
     }
 
-    deselectItem(item: Inferred<D>) {
+    deselectItem(item: D) {
       item.selected = false;
     }
 
