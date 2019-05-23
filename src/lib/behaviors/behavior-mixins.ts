@@ -79,7 +79,7 @@ export function mixinBidi<T extends Constructor>(base: T): Constructor<AffectedB
 /** Mixin that augments a given class with behavior for having an active descendant item. */
 export function mixinActiveDescendant<T extends Constructor<HasItems<D>>,
     D extends HasId & CanBeDisabled>(base: T):
-        Constructor<HasActiveDescendant<T extends Constructor<HasItems<infer I>> ? I : any>> & T {
+        Constructor<HasActiveDescendant<T extends Constructor<HasItems<infer I>> ? I : never>> & T {
   return class extends base implements HasActiveDescendant<D> {
     activeDescendantId = '';
 
@@ -159,7 +159,7 @@ export function mixinActiveDescendant<T extends Constructor<HasItems<D>>,
 /** Mixin that augments a given class with behavior for descendant items than can be selected. */
 export function mixinSelectedDescendant<T extends Constructor<HasItems<D> & HasActiveDescendant<D>>,
     D extends HasId & CanBeDisabled & CanBeSelected>(base: T):
-    Constructor<HasSelectedDescendant<T extends Constructor<HasItems<infer I>> ? I : any>> & T {
+    Constructor<HasSelectedDescendant<T extends Constructor<HasItems<infer I>> ? I : never>> & T {
   return class extends base implements HasSelectedDescendant<D> {
     multiple = false;
     selectedDescendantId = '';
