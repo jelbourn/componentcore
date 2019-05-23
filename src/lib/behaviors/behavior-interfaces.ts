@@ -12,6 +12,9 @@ import {KeyScheme} from '../key_schemes/keyscheme';
 /** Constructor for a type T */
 export type Constructor<T = object> = new(...args: any[]) => T;
 
+/** Gets the inferred type of T */
+export type Inferred<T> = T extends infer I ? T | I : never;
+
 export interface HasLifecycle {
   setup(): void;
   teardown(): void;
@@ -24,7 +27,7 @@ export interface HasId {
 
 /** A control that has some number of items, such as a listbox or menu. */
 export interface HasItems<T> {
-  getItems(): T[];
+  getItems(): Inferred<T>[];
 }
 
 /** A control that can be oriented either veritcally or horizontally. */
@@ -34,7 +37,7 @@ export interface HasOrientation {
 
 /** A control that has some keyboard interaction. */
 export interface HasKeySchemes<C> {
-  getKeySchemes(): KeyScheme<C>[];
+  getKeySchemes(): KeyScheme<Inferred<C>>[];
 }
 
 /** A control whose interaction is affected by the locale text direction. */
@@ -66,7 +69,7 @@ export interface HasActiveDescendant<D> {
   activeDescendantId: string;
 
   activeDescendantIndex(): number;
-  activeDescendant(): D;
+  activeDescendant(): Inferred<D>;
 
   activateNextItem(): void;
   activatePreviousItem(): void;
@@ -79,7 +82,7 @@ export interface HasSelectedDescendant<D extends CanBeSelected> {
   multiple: boolean;
   selectedDescendantId: string;
 
-  selectItem(item: D): void;
-  deselectItem(item: D): void;
+  selectItem(item: Inferred<D>): void;
+  deselectItem(item: Inferred<D>): void;
   toggleActiveItemSelection(): void;
 }

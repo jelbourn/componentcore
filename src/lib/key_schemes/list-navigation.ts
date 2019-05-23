@@ -6,19 +6,19 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-import {AffectedByRtl, HasActiveDescendant, HasOrientation} from '../behaviors/behavior-interfaces';
+import {AffectedByRtl, HasActiveDescendant, HasOrientation, Inferred} from '../behaviors/behavior-interfaces';
 import {DOWN_ARROW, LEFT_ARROW, RIGHT_ARROW, UP_ARROW} from './keycodes';
 import {KeyScheme} from './keyscheme';
 
 
 /** A list-like control that has arrow-key navigation, such as listbox or menu. */
-export type ListLike = HasActiveDescendant<any> & AffectedByRtl & HasOrientation;
+export type ListLike<D> = HasActiveDescendant<D> & AffectedByRtl & HasOrientation;
 
 // TODO: KeySchemes can be singletons
 
 /** Key scheme for navigating through a list-like control, such as a listbox or menu. */
-export class ListNavigationKeyScheme implements KeyScheme<ListLike> {
-  handleKey(control: ListLike, event: KeyboardEvent): boolean {
+export class ListNavigationKeyScheme implements KeyScheme<ListLike<{}>> {
+  handleKey(control: Inferred<ListLike<{}>>, event: KeyboardEvent): boolean {
     const keyCode = event.keyCode;
 
     switch (keyCode) {

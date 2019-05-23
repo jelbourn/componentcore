@@ -15,9 +15,11 @@ import {
   Constructor,
   HasActiveDescendant,
   HasId,
-  HasItems, HasLifecycle,
+  HasItems,
+  HasLifecycle,
   HasOrientation,
   HasSelectedDescendant,
+  Inferred,
 } from './behavior-interfaces';
 
 
@@ -75,11 +77,10 @@ export function mixinBidi<T extends Constructor>(base: T): Constructor<AffectedB
   }
 }
 
-
 /** Mixin that augments a given class with behavior for having an active descendant item. */
 export function mixinActiveDescendant<T extends Constructor<HasItems<D>>,
     D extends HasId & CanBeDisabled>(base: T):
-        Constructor<HasActiveDescendant<T extends Constructor<HasItems<infer I>> ? I : any>> & T {
+        Constructor<HasActiveDescendant<D>> & T {
   return class extends base implements HasActiveDescendant<D> {
     activeDescendantId = '';
 
@@ -97,12 +98,12 @@ export function mixinActiveDescendant<T extends Constructor<HasItems<D>>,
       return this.getItems().findIndex(i => i.id === this.activeDescendantId);
     }
 
-    activeDescendant(): D {
+    activeDescendant(): Inferred<D> {
       // TODO(mmalerba): Is it safe to assume this is always defined?
-      return this.getItems().find(i => i.id === this.activeDescendantId)!;
+      return this.getItems().find(i => i.id === this.activeDescendantId) as Inferred<D>;
     }
 
-    activateItem(item: D) {
+    activateItem(item: Inferred<D>) {
       // No-op if the given item is disabled.
       if (!item.disabled) {
         this.activeDescendantId = item.id;
@@ -153,18 +154,18 @@ export function mixinActiveDescendant<T extends Constructor<HasItems<D>>,
     }
 
     constructor(...args: any[]) { super(...args); }
-  } as Constructor<HasActiveDescendant<any>> & T;
+  };
 }
 
 /** Mixin that augments a given class with behavior for descendant items than can be selected. */
 export function mixinSelectedDescendant<T extends Constructor<HasItems<D> & HasActiveDescendant<D>>,
     D extends HasId & CanBeDisabled & CanBeSelected>(base: T):
-    Constructor<HasSelectedDescendant<T extends Constructor<HasItems<infer I>> ? I : any>> & T {
+    Constructor<HasSelectedDescendant<D>> & T {
   return class extends base implements HasSelectedDescendant<D> {
     multiple = false;
     selectedDescendantId = '';
 
-    selectItem(item: D) {
+    selectItem(item: Inferred<D>) {
       if (!this.multiple) {
         this.getItems().forEach(i => i.selected = false);
       }
@@ -172,7 +173,7 @@ export function mixinSelectedDescendant<T extends Constructor<HasItems<D> & HasA
       item.selected = true;
     }
 
-    deselectItem(item: D) {
+    deselectItem(item: Inferred<D>) {
       item.selected = false;
     }
 
