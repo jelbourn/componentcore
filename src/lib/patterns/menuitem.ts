@@ -22,7 +22,7 @@ export interface MenuItemPattern extends HasLifecycle, CanBeDisabled, HasId { }
 // structure of `MenuItemPattern`.
 
 /** Mixin that augments the given class with the behaviors for an `menuitem`. */
-export function mixinMenuItem<T extends Constructor<object>>(base?: T): Constructor<MenuItemPattern> & T {
+export function mixinMenuItem<T extends Constructor>(base?: T): Constructor<MenuItemPattern> & T {
   return class extends (
     mixinUniqueId(
     mixinLifecycle(

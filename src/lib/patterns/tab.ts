@@ -33,7 +33,7 @@ export interface TabPattern extends HasLifecycle, CanBeDisabled, HasId, CanBeSel
 // structure of `TabPattern`.
 
 /** Mixin that augments the given class with the behaviors for an `tab`. */
-export function mixinTab<T extends Constructor<object>>(base?: T): Constructor<TabPattern> & T {
+export function mixinTab<T extends Constructor>(base?: T): Constructor<TabPattern> & T {
   return class extends (
     mixinSelected(
     mixinUniqueId(

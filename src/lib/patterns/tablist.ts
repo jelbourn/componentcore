@@ -72,8 +72,7 @@ export interface TabListPattern extends
 // structure of `TabListPattern`.
 
 /** Mixes the common behaviors of a ListBox onto a class */
-export function mixinTabList<T extends Constructor<object>>(base?: T):
-    Constructor<TabListPattern> & T {
+export function mixinTabList<T extends Constructor>(base?: T): Constructor<TabListPattern> & T {
   return class extends (
     mixinSelectedDescendant(
     mixinActiveDescendant(

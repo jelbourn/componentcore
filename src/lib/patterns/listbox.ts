@@ -71,8 +71,7 @@ export interface ListboxPattern extends
 // structure of `ListboxPattern`.
 
 /** Mixes the common behaviors of a ListBox onto a class */
-export function mixinListbox<T extends Constructor<object>>(base?: T):
-    Constructor<ListboxPattern> & T {
+export function mixinListbox<T extends Constructor>(base?: T): Constructor<ListboxPattern> & T {
   return class extends (
     mixinSelectedDescendant(
     mixinActiveDescendant(

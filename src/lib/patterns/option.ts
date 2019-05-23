@@ -33,7 +33,7 @@ export interface OptionPattern extends HasLifecycle, CanBeDisabled, HasId, CanBe
 // structure of `OptionPattern`.
 
 /** Mixin that augments the given class with the behaviors for an `option`. */
-export function mixinOption<T extends Constructor<object>>(base?: T): Constructor<OptionPattern> & T {
+export function mixinOption<T extends Constructor>(base?: T): Constructor<OptionPattern> & T {
   return class extends (
     mixinSelected(
     mixinUniqueId(

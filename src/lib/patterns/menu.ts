@@ -69,7 +69,7 @@ export interface MenuPattern extends
 // structure of `MenuPattern`.
 
 /** Mixes the common behaviors of a menu onto a class */
-export function mixinMenu<T extends Constructor<object>>(base?: T): Constructor<MenuPattern> & T {
+export function mixinMenu<T extends Constructor>(base?: T): Constructor<MenuPattern> & T {
   return class extends (
     mixinActiveDescendant(
     mixinBidi(
