@@ -83,3 +83,28 @@ export class OptionDom extends mixinOption() {
     this.hostElement.setAttribute('role', 'option');
   }
 }
+
+
+abstract class AbstractDummy {
+  abstract dumb(): void;
+}
+
+abstract class AbstractDummyListbox extends mixinDomKeyHandling(mixinDomFocus(mixinListbox(AbstractDummy))) {
+  constructor(public hostElement: HTMLElement) {super();}
+  getItems(): OptionPattern[] {return [];}
+  render() {this.dumb();}
+}
+
+class ConcreteAbstractDummyListbox extends AbstractDummyListbox {
+  dumb() {}
+}
+
+class ConcreteDummy {
+  dumb() {}
+}
+
+class ConcreteDummyListbox extends mixinDomKeyHandling(mixinDomFocus(mixinListbox(ConcreteDummy))) {
+  constructor(public hostElement: HTMLElement) {super();}
+  getItems(): OptionPattern[] {return [];}
+  render() {this.dumb();}
+}
