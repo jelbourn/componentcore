@@ -6,6 +6,7 @@
  * found in the LICENSE file at https://angular.io/license
  */
 import {
+  ConcreteOrAbstractConstructor,
   AffectedByRtl,
   CanBeDisabled,
   CanBeFocused,
@@ -70,7 +71,8 @@ export interface ListboxPattern extends
 // abstract stub class prevents TypeScript from recognizing that the mixins applied satisfy the
 // structure of `ListboxPattern`.
 
-export function mixinListboxKeyScheme<T extends Constructor>(base: T): Constructor<HasKeySchemes<ListboxPattern>> & T {
+export function mixinListboxKeyScheme<T extends Constructor>(base: T):
+    Constructor<HasKeySchemes<ListboxPattern>> & T {
   return class extends base implements HasKeySchemes<ListboxPattern> {
     getKeySchemes(): KeyScheme<ListboxPattern>[] {
       return listboxKeySchemes;
@@ -81,7 +83,8 @@ export function mixinListboxKeyScheme<T extends Constructor>(base: T): Construct
 }
 
 /** Mixes the common behaviors of a ListBox onto a class */
-export function mixinListbox<T extends Constructor>(base?: T): Constructor<ListboxPattern> & T {
+export function mixinListbox<T extends ConcreteOrAbstractConstructor>(base?: T):
+    Constructor<ListboxPattern> & T {
   return mixinListboxKeyScheme(
     mixinSelectedDescendant(
     mixinActiveDescendant(
