@@ -9,6 +9,7 @@ import {
   AffectedByRtl,
   CanBeDisabled,
   CanBeFocused,
+  ConcreteOrAbstractConstructor,
   Constructor,
   HasActiveDescendant,
   HasId,
@@ -19,6 +20,7 @@ import {
   HasSelectedDescendant,
 } from '../behaviors/behavior-interfaces';
 import {
+  createMixinBase,
   mixinActiveDescendant,
   mixinBidi,
   mixinDisabled,
@@ -67,12 +69,6 @@ export interface TabListPattern extends
     HasActiveDescendant<TabPattern>,
     HasSelectedDescendant<TabPattern> { }
 
-// Note: the `as Constructor<TabListStub>` cast below exists to enforce that downstream classes that
-// apply this mixin are still required to implement any abstract members on the stub class.
-// The casts for `as Constructor<TabListPattern> & T` and `as any` exist because the precense of the
-// abstract stub class prevents TypeScript from recognizing that the mixins applied satisfy the
-// structure of `TabListPattern`.
-
 export function mixinTabListKeyScheme<T extends Constructor>(base: T): Constructor<HasKeySchemes<TabListPattern>> & T {
   return class extends base implements HasKeySchemes<TabListPattern> {
     getKeySchemes(): KeyScheme<TabListPattern>[] {
@@ -92,7 +88,7 @@ export function mixinTabListOrientation<T extends Constructor>(base: T): Constru
 }
 
 /** Mixes the common behaviors of a ListBox onto a class */
-export function mixinTabList<T extends Constructor>(base?: T): Constructor<TabListPattern> & T {
+export function mixinTabList<T extends ConcreteOrAbstractConstructor>(base?: T): Constructor<TabListPattern> & T {
   return mixinTabListKeyScheme(
     mixinTabListOrientation(
     mixinSelectedDescendant(
@@ -100,5 +96,6 @@ export function mixinTabList<T extends Constructor>(base?: T): Constructor<TabLi
     mixinBidi(
     mixinLifecycle(
     mixinDisabled(
-    mixinUniqueId((base || class {}) as T & Constructor<TabListStub>))))))));
+    mixinUniqueId(
+    createMixinBase<T, TabListStub>(base)))))))));
 }

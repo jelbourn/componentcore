@@ -9,14 +9,11 @@
 import {KeyScheme} from '../key_schemes/keyscheme';
 
 
-/** Concrete constructor for a type T */
-export type Constructor<T = object> = (new(...args: any[]) => T);
+/** Constructor for a concrete type T */
+export type Constructor<T = object> = new(...args: any[]) => T;
 
-/** Concrete or abstract constructor for a type T */
-export type ConcreteOrAbstractConstructor<T = object> = (Function & {prototype: T});
-
-/** Constructor for an abstract type T */
-//export type Constructor<T = object> = Function & {prototype: T};
+/** Constructor for a concrete or abstract type T */
+export type ConcreteOrAbstractConstructor<T = object> = Function & {prototype: T};
 
 export interface HasLifecycle {
   setup(): void;

@@ -12,6 +12,7 @@ import {
   AffectedByRtl,
   CanBeDisabled,
   CanBeSelected,
+  ConcreteOrAbstractConstructor,
   Constructor,
   HasActiveDescendant,
   HasId,
@@ -21,6 +22,15 @@ import {
   HasSelectedDescendant,
 } from './behavior-interfaces';
 
+
+/** Function used to create base class passed to mixins. */
+export function createMixinBase<B extends ConcreteOrAbstractConstructor, S extends object = object>(
+    base?: B | undefined): B & Constructor<S> {
+  // TypeScript doesn't allow abstract classes to be extended via a mixin, so we need to tell typescript that this is a
+  // `Constructor`. We also may need to specify an abstract stub type so that TypeScript knows which methods need to be
+  // filled in by the user.
+  return (base || class {}) as B & Constructor<S>;
+}
 
 /** Mixin that augments a given class with a `disabled` property. */
 export function mixinDisabled<T extends Constructor>(base: T): Constructor<CanBeDisabled> & T {
@@ -99,7 +109,7 @@ export function mixinActiveDescendant<T extends Constructor<HasItems<D>>,
 
     activeDescendant(): D {
       // TODO(mmalerba): Is it safe to assume this is always defined?
-      return this.getItems().find(i => i.id === this.activeDescendantId) as D;
+      return this.getItems().find(i => i.id === this.activeDescendantId)!;
     }
 
     activateItem(item: D) {

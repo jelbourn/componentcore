@@ -12,7 +12,7 @@ import {KeyScheme} from './keyscheme';
 
 
 /** A list-like control that has arrow-key navigation, such as listbox or menu. */
-export type ListLike<D = {}> = HasActiveDescendant<D> & AffectedByRtl & HasOrientation;
+export type ListLike<D = unknown> = HasActiveDescendant<D> & AffectedByRtl & HasOrientation;
 
 // TODO: KeySchemes can be singletons
 

@@ -19,6 +19,7 @@ import {
   HasSelectedDescendant,
 } from '../behaviors/behavior-interfaces';
 import {
+  createMixinBase,
   mixinActiveDescendant,
   mixinBidi,
   mixinDisabled, mixinLifecycle,
@@ -65,13 +66,7 @@ export interface ListboxPattern extends
     HasActiveDescendant<OptionPattern>,
     HasSelectedDescendant<OptionPattern> { }
 
-// Note: the `as Constructor<ListboxStub>` cast below exists to enforce that downstream classes that
-// apply this mixin are still required to implement any abstract members on the stub class.
-// The casts for `as Constructor<ListboxPattern> & T` and `as any` exist because the precense of the
-// abstract stub class prevents TypeScript from recognizing that the mixins applied satisfy the
-// structure of `ListboxPattern`.
-
-export function mixinListboxKeyScheme<T extends Constructor>(base: T):
+function mixinListboxKeyScheme<T extends Constructor>(base: T):
     Constructor<HasKeySchemes<ListboxPattern>> & T {
   return class extends base implements HasKeySchemes<ListboxPattern> {
     getKeySchemes(): KeyScheme<ListboxPattern>[] {
@@ -92,5 +87,6 @@ export function mixinListbox<T extends ConcreteOrAbstractConstructor>(base?: T):
     mixinOrientation(
     mixinLifecycle(
     mixinDisabled(
-    mixinUniqueId((base || class {}) as T & Constructor<ListboxStub>))))))));
+    mixinUniqueId(
+    createMixinBase<T, ListboxStub>(base)))))))));
 }

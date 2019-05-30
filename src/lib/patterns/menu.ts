@@ -9,17 +9,21 @@ import {
   AffectedByRtl,
   CanBeDisabled,
   CanBeFocused,
+  ConcreteOrAbstractConstructor,
   Constructor,
   HasActiveDescendant,
   HasId,
   HasItems,
-  HasKeySchemes, HasLifecycle,
+  HasKeySchemes,
+  HasLifecycle,
   HasOrientation,
 } from '../behaviors/behavior-interfaces';
 import {
+  createMixinBase,
   mixinActiveDescendant,
   mixinBidi,
-  mixinDisabled, mixinLifecycle,
+  mixinDisabled,
+  mixinLifecycle,
   mixinOrientation,
   mixinUniqueId,
 } from '../behaviors/behavior-mixins';
@@ -62,26 +66,24 @@ export interface MenuPattern extends
     HasKeySchemes<MenuPattern>,
     HasActiveDescendant<MenuItemPattern> { }
 
-// Note: the `as Constructor<MenuStub>` cast below exists to enforce that downstream classes that
-// apply this mixin are still required to implement any abstract members on the stub class.
-// The casts for `as Constructor<MenuPattern> & T` and `as any` exist because the precense of the
-// abstract stub class prevents TypeScript from recognizing that the mixins applied satisfy the
-// structure of `MenuPattern`.
-
-/** Mixes the common behaviors of a menu onto a class */
-export function mixinMenu<T extends Constructor>(base?: T): Constructor<MenuPattern> & T {
-  return class extends (
-    mixinActiveDescendant(
-    mixinBidi(
-    mixinOrientation(
-    mixinLifecycle(
-    mixinDisabled(
-    mixinUniqueId((base || class { }) as Constructor<MenuStub>)))))) as any) {
-
+function mixinMenuKeyScheme<T extends Constructor>(base: T): Constructor<HasKeySchemes<MenuPattern>> & T {
+  return class extends base implements HasKeySchemes<MenuPattern> {
     getKeySchemes(): KeyScheme<MenuPattern>[] {
       return menuKeySchemes;
     }
 
     constructor(...args: any[]) { super(...args); }
-  } as Constructor<MenuPattern> & T;
+  }
+}
+
+/** Mixes the common behaviors of a menu onto a class */
+export function mixinMenu<T extends ConcreteOrAbstractConstructor>(base?: T): Constructor<MenuPattern> & T {
+  return mixinMenuKeyScheme(
+    mixinActiveDescendant(
+    mixinBidi(
+    mixinOrientation(
+    mixinLifecycle(
+    mixinDisabled(
+    mixinUniqueId(
+    createMixinBase<T, MenuStub>(base))))))));
 }
