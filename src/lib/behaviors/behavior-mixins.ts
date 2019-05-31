@@ -162,7 +162,6 @@ export function mixinSelectedDescendant<T extends Constructor<HasItems<D> & HasA
     Constructor<HasSelectedDescendant<T extends Constructor<HasItems<infer I>> ? I : never>> & T {
   return class extends base implements HasSelectedDescendant<D> {
     multiple = false;
-    selectedDescendantId = '';
 
     selectItem(item: D) {
       if (!this.multiple) {

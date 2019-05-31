@@ -3,30 +3,37 @@
 <head>
   <title>component-core demo</title>
   <style>
-    li[aria-selected="true"] {
+    cc-option[aria-selected="true"], li[aria-selected="true"] {
       color: peru;
     }
 
-    li.cc-item-active {
+    .cc-item-active {
       font-weight: bold;
     }
   </style>
 </head>
 <body>
 
-  <h2>Example listbox + option</h2>
+  <h2>Example vanilla DOM listbox + option</h2>
   <ul id="listbox">
     <li>Apple</li>
     <li>Banana</li>
     <li>Coconut</li>
   </ul>
 
-  <h2>Example menu + menuitem</h2>
+  <h2>Example vanilla DOM menu + menuitem</h2>
   <ul id="menu">
     <li>Settings</li>
     <li>Profile</li>
     <li>Help</li>
   </ul>
+
+  <h2>Example webcomponent listbox</h2>
+  <cc-listbox>
+    <cc-option>Pizza</cc-option>
+    <cc-option>Pancakes</cc-option>
+    <cc-option>Ice cream</cc-option>
+  </cc-listbox>
 
   <script type="module" src="./main.js"></script>
 </body>

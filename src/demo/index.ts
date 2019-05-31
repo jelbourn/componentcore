@@ -1,5 +1,6 @@
 import {ListboxDom, OptionDom} from '../lib/dom_impl/listbox';
 import {MenuDom, MenuItemDom} from '../lib/dom_impl/menu';
+import {ListboxElement, OptionElement} from '../lib/webcomponent_impl/listbox';
 
 
 // Create listbox DOM instance
@@ -21,3 +22,8 @@ const menuItems = menuItemHosts.map(e => new MenuItemDom(e));
 
 menuItems.forEach(o => o.setup());
 menu.setup();
+
+
+// Register webcomponents
+customElements.define('cc-listbox', ListboxElement);
+customElements.define('cc-option', OptionElement);

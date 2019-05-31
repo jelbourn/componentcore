@@ -77,7 +77,6 @@ export interface HasActiveDescendant<D> {
 /** A control that has one or more selected descendants, such as a listbox. */
 export interface HasSelectedDescendant<D extends CanBeSelected> {
   multiple: boolean;
-  selectedDescendantId: string;
 
   selectItem(item: D): void;
   deselectItem(item: D): void;
