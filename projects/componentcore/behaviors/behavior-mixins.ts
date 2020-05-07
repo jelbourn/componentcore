@@ -51,9 +51,16 @@ export function mixinSelected<T extends Constructor>(base: T): Constructor<CanBe
 let nextId = 0;
 
 /** Mixin that augments a given class with an `id` property initialized to a unique value. */
-export function mixinUniqueId<T extends Constructor>(base: T): Constructor<HasId> & T {
+export function mixinUniqueId<T extends Constructor<HasLifecycle>>(base: T): Constructor<HasId> & T {
   return class extends base implements HasId {
-    id = `cc${nextId++}`;
+    // Can't just plain set `id` here since it would break a custom element using this mixin.
+    // Custom elements aren't allowed to set attributes during the constructor, and setting the ID
+    // property will reflect back into an attribute.
+    id: string;
+    setup() {
+      this.id = `cc${nextId++}`;
+      super.setup();
+    }
     constructor(...args: any[]) { super(...args); }
   };
 }

@@ -19,7 +19,10 @@ export class Option extends mixinOption() {
   // an `aria-activedescendant` model.
   constructor(private parent: Listbox) {
     super();
+    this.setup();
   }
+
+  ngOnDestroy() { this.teardown(); }
 }
 
 @Component({
@@ -32,21 +35,15 @@ export class Option extends mixinOption() {
     '[attr.aria-disabled]': 'this.disabled || null',
     'tabindex': '0',
     '(keydown)': 'handleKey($event)', // TODO: WebStorm doesn't like this, but tsc compiles.
-    '(focus)': 'isFocused = true',
-    '(blur)': 'isFocused = false',
   },
 })
 export class Listbox extends mixinListbox() implements OnInit, OnDestroy {
   @ContentChildren(Option) options: QueryList<Option>;
 
-  isFocused: boolean;
-  get tabIndex(): number {
-    return this.elementRef.nativeElement.tabIndex;
-  }
+  get isFocused(): boolean { return this.elementRef.nativeElement === document.activeElement; }
+  get tabIndex(): number { return this.elementRef.nativeElement.tabIndex; }
 
-  constructor(private elementRef: ElementRef<HTMLElement>) {
-    super();
-  }
+  constructor(private elementRef: ElementRef<HTMLElement>) { super(); }
 
   ngOnInit() { this.setup(); }
   ngOnDestroy() { this.teardown(); }
@@ -54,9 +51,7 @@ export class Listbox extends mixinListbox() implements OnInit, OnDestroy {
   focus(): void { this.elementRef.nativeElement.focus(); }
   blur(): void { this.elementRef.nativeElement.blur(); }
 
-
   getItems(): OptionPattern[] {
     return this.options?.toArray() || [];
   }
-
 }

@@ -79,9 +79,9 @@ export function mixinListbox<T extends Constructor>(base?: T):
     mixinHandleKey(
     mixinBidi(
     mixinOrientation(
-    mixinLifecycle(
+    mixinUniqueId(
     mixinDisabled(
-    mixinUniqueId((base || class { }) as Constructor<ListboxStub>)))))))) as any) {
+    mixinLifecycle((base || class { }) as Constructor<ListboxStub>)))))))) as any) {
 
     getKeySchemes(): KeyScheme<ListboxPattern>[] {
       return listboxKeySchemes;
