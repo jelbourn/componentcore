@@ -22,6 +22,10 @@
       "componentcore": [
         "dist/componentcore/componentcore",
         "dist/componentcore"
+      ],
+      "lit-demo": [
+        "dist/lit-demo/lit-demo",
+        "dist/lit-demo"
       ]
     }
   },
