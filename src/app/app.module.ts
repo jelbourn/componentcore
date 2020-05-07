@@ -2,10 +2,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
+import { Listbox, Option } from './listbox/listbox';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    Listbox,
+    Option,
   ],
   imports: [
     BrowserModule

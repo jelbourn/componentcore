@@ -1,15 +1,18 @@
-import { Component } from '@angular/core';
-import {SPACE} from '../../projects/componentcore/key_schemes/keycodes';
+import {Component} from '@angular/core';
 
 
 @Component({
   selector: 'cc-root',
   template: `
-    {{x}}
-    
+    <h2>Angular Listbox</h2>
+    <cc-listbox>
+      <cc-option>Cheese</cc-option>
+      <cc-option>Garlic</cc-option>
+      <cc-option>Tomato</cc-option>
+      <cc-option>Onion</cc-option>
+    </cc-listbox>
   `,
-  styles: []
 })
 export class AppComponent {
-  x = SPACE;
+
 }

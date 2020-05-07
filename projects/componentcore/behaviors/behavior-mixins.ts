@@ -15,10 +15,11 @@ import {
   Constructor,
   HasActiveDescendant,
   HasId,
-  HasItems, HasLifecycle,
+  HasItems, HasKeySchemes, HasLifecycle,
   HasOrientation,
   HasSelectedDescendant,
 } from './behavior-interfaces';
+import {KeyScheme} from '../key_schemes/keyscheme';
 
 
 /** Mixin that augments a given class with a `disabled` property. */
@@ -75,6 +76,34 @@ export function mixinBidi<T extends Constructor>(base: T): Constructor<AffectedB
   }
 }
 
+/** Stub that gets applied via mixin so that this part of `HasKeySchemes` is abstract. */
+declare abstract class HasKeySchemeStub<C> {
+  abstract getKeySchemes(): KeyScheme<C>[];
+}
+
+/** Partial sub-interface of `HasKeySchemes` so that `handleKey` is concrete. */
+interface HasHandleKey<C> extends HasKeySchemeStub<C> {
+  handleKey(event: KeyboardEvent);
+}
+
+/** Adds a concrete `handleKey` and an abstract `getKeySchemes` for `HasKeySchemes`. */
+export function mixinHandleKey<T extends Constructor<C>, C>(base: T): Constructor<HasHandleKey<C>> & T {
+  // TODO: this cast should be Constructor<C & HasKeySchemes<C>>, but TS won't accept this and
+  // I don't understand why. This would eliminate the second cast in the call to `handleKey`.
+  return class extends (base as unknown as (Constructor<HasKeySchemes<C>>)) {
+    handleKey(event: KeyboardEvent): void {
+      for (const scheme of this.getKeySchemes()) {
+        const handled = scheme.handleKey(this as unknown as C, event);
+        if (handled) {
+          return;
+        }
+      }
+    }
+
+    constructor(...args: any[]) { super(...args); }
+  } as Constructor<HasHandleKey<C>> & T
+}
+
 
 /** Mixin that augments a given class with behavior for having an active descendant item. */
 export function mixinActiveDescendant<T extends Constructor<HasItems<D>>,
@@ -85,13 +114,13 @@ export function mixinActiveDescendant<T extends Constructor<HasItems<D>>,
 
     // TODO: make wrapping optional
 
-    // Note: It's important not to keep a reference to the collection of items in case that
+    // Note: It's important *not* to keep a reference to the collection of items in case that
     // collection changes to a different reference. Any time we need to get the items, we
     // go through the `getItems` method.
 
     // Note: It's important to not remember the active descendant index (or the item reference)
-    // because the list of items might change, leading to the index being out of date. Will have to
-    // always based on the ID at the moment.
+    // because the list of items might change, leading to the index being out of date. Thus the
+    // items are always identified by ID.
 
     activeDescendantIndex(): number {
       return this.getItems().findIndex(i => i.id === this.activeDescendantId);

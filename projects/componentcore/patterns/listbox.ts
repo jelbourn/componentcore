@@ -20,7 +20,7 @@ import {
 import {
   mixinActiveDescendant,
   mixinBidi,
-  mixinDisabled, mixinLifecycle,
+  mixinDisabled, mixinHandleKey, mixinLifecycle,
   mixinOrientation,
   mixinSelectedDescendant,
   mixinUniqueId,
@@ -66,21 +66,22 @@ export interface ListboxPattern extends
 
 // Note: the `as Constructor<ListboxStub>` cast below exists to enforce that downstream classes that
 // apply this mixin are still required to implement any abstract members on the stub class.
-// The casts for `as Constructor<ListboxPattern> & T` and `as any` exist because the precense of the
+// The casts for `as Constructor<ListboxPattern> & T` and `as any` exist because the presence of the
 // abstract stub class prevents TypeScript from recognizing that the mixins applied satisfy the
 // structure of `ListboxPattern`.
 
 /** Mixes the common behaviors of a ListBox onto a class */
-export function mixinListbox<T extends Constructor<object>>(base?: T):
+export function mixinListbox<T extends Constructor>(base?: T):
     Constructor<ListboxPattern> & T {
   return class extends (
     mixinSelectedDescendant(
     mixinActiveDescendant(
+    mixinHandleKey(
     mixinBidi(
     mixinOrientation(
     mixinLifecycle(
     mixinDisabled(
-    mixinUniqueId((base || class { }) as Constructor<ListboxStub>))))))) as any) {
+    mixinUniqueId((base || class { }) as Constructor<ListboxStub>)))))))) as any) {
 
     getKeySchemes(): KeyScheme<ListboxPattern>[] {
       return listboxKeySchemes;

@@ -13,10 +13,12 @@
           "skipTests": true
         },
         "@schematics/angular:component": {
-          "skipTests": true
+          "skipTests": true,
+          "type": ""
         },
         "@schematics/angular:directive": {
-          "skipTests": true
+          "skipTests": true,
+          "type": ""
         },
         "@schematics/angular:guard": {
           "skipTests": true
@@ -31,7 +33,8 @@
           "skipTests": true
         },
         "@schematics/angular:service": {
-          "skipTests": true
+          "skipTests": true,
+          "type": ""
         }
       },
       "root": "",
