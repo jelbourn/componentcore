@@ -105,6 +105,46 @@
           }
         }
       }
+    },
+    "componentcore": {
+      "projectType": "library",
+      "root": "projects/componentcore",
+      "sourceRoot": "projects/componentcore/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/componentcore/tsconfig.lib.json",
+            "project": "projects/componentcore/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/componentcore/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/componentcore/src/test.ts",
+            "tsConfig": "projects/componentcore/tsconfig.spec.json",
+            "karmaConfig": "projects/componentcore/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/componentcore/tsconfig.lib.json",
+              "projects/componentcore/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }},
   "defaultProject": "prototype-primitives"
 }
