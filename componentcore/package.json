@@ -5,8 +5,7 @@
   "scripts": {
     "build": "rm -rf ./dist && tsc -p tsconfig.json && cp package.json ./dist"
   },
-  "devDependencies": {},
-  "dependencies": {
+  "devDependencies": {
     "typescript": "^3.9.6"
   }
 }
