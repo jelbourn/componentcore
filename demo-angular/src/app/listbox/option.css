@@ -1,0 +1,11 @@
+:host {
+  display: block;
+}
+
+:host[aria-selected="true"] {
+  color: peru;
+}
+
+:host.cc-option-active {
+  outline: 1px solid rebeccapurple;
+}
